@@ -33,7 +33,28 @@ USAGE
 # Commands
 
 <!-- commands -->
+* [`repo-config hello [FILE]`](#repo-config-hello-file)
 * [`repo-config help [COMMAND]`](#repo-config-help-command)
+
+## `repo-config hello [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ repo-config hello [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+
+EXAMPLE
+  $ repo-config hello
+  hello world from ./src/hello.ts!
+```
+
+_See code: [commands/hello.ts](https://github.com/C45tr0/repo-config/blob/master/src/commands/hello.ts)_
 
 ## `repo-config help [COMMAND]`
 

@@ -6,7 +6,7 @@
   "license": "MIT",
   "homepage": "https://github.com/C45tr0/repo-config",
   "bugs": "https://github.com/C45tr0/repo-config/issues",
-  "repository": "C45tr0/repo-config",
+  "repository": "github:C45tr0/repo-config",
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {
@@ -20,7 +20,7 @@
     "start": "./dist/bin/run",
     "clean": "shx rm -rf dist && shx rm -rf node_modules",
     "build": "yarn && tsc -b",
-    "postbuild": "oclif-dev readme && shx cp -r package.json LICENSE.txt README.md bin dist",
+    "postbuild": "shx cp -r package.json LICENSE.txt README.md bin dist && cd dist && oclif-dev readme && shx cp README.md ../",
     "prepackage": "yarn clean && yarn build",
     "package": "cd dist && yarn publish --non-interactive",
     "preversion": "oclif-dev readme && git add README.md",
@@ -43,6 +43,7 @@
     "typescript": "^3.0"
   },
   "oclif": {
+    "repositoryPrefix": "<%- repo %>/blob/master/src/<%- commandPath %>",
     "commands": "./commands",
     "bin": "repo-config",
     "plugins": [
