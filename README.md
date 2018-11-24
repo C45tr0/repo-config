@@ -18,11 +18,11 @@
 
 <!-- usage -->
 ```sh-session
-$ npm install -g repo-config
+$ npm install -g @repo-config/core
 $ repo-config COMMAND
 running command...
 $ repo-config (-v|--version|version)
-repo-config/1.0.0 linux-x64 node-v10.13.0
+@repo-config/core/1.0.0 linux-x64 node-v10.13.0
 $ repo-config --help [COMMAND]
 USAGE
   $ repo-config COMMAND
@@ -54,7 +54,7 @@ EXAMPLE
   hello world from ./src/hello.ts!
 ```
 
-_See code: [commands/hello.ts](https://github.com/C45tr0/repo-config/blob/master/src/commands/hello.ts)_
+_See code: [commands/hello.ts](https://github.com/repo-config/core/blob/master/src/commands/hello.ts)_
 
 ## `repo-config help [COMMAND]`
 

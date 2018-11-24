@@ -1,12 +1,12 @@
 {
-  "name": "repo-config",
+  "name": "@repo-config/core",
   "version": "1.0.0",
   "description": "Repo setup tool for consistent configuration",
   "author": "C45tr0",
   "license": "MIT",
-  "homepage": "https://github.com/C45tr0/repo-config",
-  "bugs": "https://github.com/C45tr0/repo-config/issues",
-  "repository": "github:C45tr0/repo-config",
+  "homepage": "https://github.com/repo-config/core",
+  "bugs": "https://github.com/repo-config/core/issues",
+  "repository": "github:repo-config/core",
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {
