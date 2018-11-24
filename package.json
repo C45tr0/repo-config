@@ -1,0 +1,52 @@
+{
+  "name": "repo-config",
+  "version": "1.0.0",
+  "description": "Repo setup tool for consistent configuration",
+  "author": "C45tr0",
+  "license": "MIT",
+  "homepage": "https://github.com/C45tr0/repo-config",
+  "bugs": "https://github.com/C45tr0/repo-config/issues",
+  "repository": "C45tr0/repo-config",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bin": {
+    "repo-config": "./bin/run"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+    "prestart": "yarn build",
+    "start": "./dist/bin/run",
+    "clean": "shx rm -rf dist && shx rm -rf node_modules",
+    "build": "yarn && tsc -b",
+    "postbuild": "oclif-dev readme && shx cp -r package.json LICENSE.txt README.md bin dist",
+    "prepackage": "yarn clean && yarn build",
+    "package": "cd dist && yarn publish --non-interactive",
+    "preversion": "oclif-dev readme && git add README.md",
+    "postversion": "git push && git push --tags && yarn package"
+  },
+  "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^2",
+    "pkg-conf": "^2.1.0",
+    "shelljs": "^0.8.3",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@oclif/tslint": "^3",
+    "@types/node": "^10",
+    "@types/pkg-conf": "^2.1.0",
+    "shx": "^0.3.2",
+    "typescript": "^3.0"
+  },
+  "oclif": {
+    "commands": "./commands",
+    "bin": "repo-config",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  }
+}
