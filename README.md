@@ -1,4 +1,4 @@
-# repo-config
+# @repo-config/core
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/repo-config.svg)](https://npmjs.org/package/repo-config)
@@ -9,14 +9,16 @@
 [![License](https://img.shields.io/npm/l/repo-config.svg)](https://github.com/C45tr0/repo-config/blob/master/package.json)
 
 <!-- toc -->
-* [repo-config](#repo-config)
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
+
+- [repo-config](#repo-config)
+- [Usage](#usage)
+- [Commands](#commands)
+  <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @repo-config/core
 $ repo-config COMMAND
@@ -28,13 +30,15 @@ USAGE
   $ repo-config COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`repo-config hello [FILE]`](#repo-config-hello-file)
-* [`repo-config help [COMMAND]`](#repo-config-help-command)
+
+- [`repo-config hello [FILE]`](#repo-config-hello-file)
+- [`repo-config help [COMMAND]`](#repo-config-help-command)
 
 ## `repo-config hello [FILE]`
 
@@ -72,4 +76,5 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.4/src/commands/help.ts)_
+
 <!-- commandsstop -->

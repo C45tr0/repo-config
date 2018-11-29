@@ -12,42 +12,25 @@
   "bin": {
     "repo-config": "./bin/run"
   },
-  "engines": {
-    "node": ">=8.0.0"
-  },
   "scripts": {
     "prestart": "yarn build",
     "start": "./dist/bin/run",
     "clean": "shx rm -rf dist && shx rm -rf node_modules",
     "build": "yarn && tsc -b",
-    "postbuild": "shx cp -r package.json LICENSE.txt README.md bin dist && cd dist && oclif-dev readme && shx cp README.md ../",
+    "postbuild": "shx cp -r package.json LICENSE.txt README.md bin dist",
     "prepackage": "yarn clean && yarn build",
     "package": "cd dist && yarn publish --non-interactive",
-    "preversion": "oclif-dev readme && git add README.md",
     "postversion": "git push && git push --tags && yarn package"
   },
   "dependencies": {
-    "@oclif/command": "^1",
-    "@oclif/config": "^1",
-    "@oclif/plugin-help": "^2",
+    "minimist": "^1.2.0",
     "pkg-conf": "^2.1.0",
-    "shelljs": "^0.8.3",
-    "tslib": "^1"
+    "shelljs": "^0.8.3"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1",
-    "@oclif/tslint": "^3",
+    "@types/minimist": "^1.2.0",
     "@types/node": "^10",
-    "@types/pkg-conf": "^2.1.0",
     "shx": "^0.3.2",
     "typescript": "^3.0"
-  },
-  "oclif": {
-    "repositoryPrefix": "<%- repo %>/blob/master/src/<%- commandPath %>",
-    "commands": "./commands",
-    "bin": "repo-config",
-    "plugins": [
-      "@oclif/plugin-help"
-    ]
   }
 }
