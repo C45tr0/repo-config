@@ -1,0 +1,10 @@
+{
+  "repo-config": {
+    "copy": {
+      "random-file2": ""
+    },
+    "extends": [
+      "test-extend"
+    ]
+  }
+}

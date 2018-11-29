@@ -13,6 +13,8 @@
     "repo-config": "./bin/run"
   },
   "scripts": {
+    "pretest": "shx rm -rf dist",
+    "test": "jest",
     "prestart": "yarn build",
     "start": "./dist/bin/run",
     "clean": "shx rm -rf dist && shx rm -rf node_modules",
@@ -23,14 +25,24 @@
     "postversion": "git push && git push --tags && yarn package"
   },
   "dependencies": {
+    "deepmerge": "^2.2.1",
     "minimist": "^1.2.0",
     "pkg-conf": "^2.1.0",
     "shelljs": "^0.8.3"
   },
   "devDependencies": {
+    "@types/deepmerge": "^2.2.0",
+    "@types/jest": "^23.3.10",
     "@types/minimist": "^1.2.0",
     "@types/node": "^10",
+    "@types/shelljs": "^0.8.0",
+    "jest": "^23.6.0",
     "shx": "^0.3.2",
+    "ts-jest": "^23.10.5",
     "typescript": "^3.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }

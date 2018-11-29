@@ -1,0 +1,4 @@
+{
+  "copy": { "random-file": "" },
+  "extends": ["test-extend2"]
+}
