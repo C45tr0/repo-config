@@ -56,54 +56,95 @@ export interface PackageConfig {
 const PACKAGE_CONFIG_KEY = "repo-config";
 const CONFIG_FILE_NAME = "repo.config.json";
 
-export default function loadConfig(folderPath?: string, ext?: string) {
-  let packageConf = pkgConf.sync<ProcessingConfig>(PACKAGE_CONFIG_KEY, {
-    skipOnFalse: true,
-    cwd: folderPath
-  });
-  const filepath = pkgConf.filepath(packageConf);
-  const dir = filepath === null ? process.cwd() : path.dirname(filepath);
-  const configFile = path.join(dir, CONFIG_FILE_NAME);
+export default function loadConfig(
+  folderPaths?: string[],
+  ext?: string
+): [string, PackageConfig] {
+  folderPaths = folderPaths || [process.cwd()];
 
-  if (folderPath && !dir.includes(folderPath)) {
-    throw new Error(`Module not found: ${ext}`);
+  let packageConf: ProcessingConfig | null = null;
+  let foundPath: string | null = null;
+  let filepath: string | null;
+  let dir: string = "";
+  let configFile: string;
+
+  for (const folderPath of folderPaths) {
+    packageConf = pkgConf.sync<ProcessingConfig>(PACKAGE_CONFIG_KEY, {
+      skipOnFalse: true,
+      cwd: folderPath
+    });
+
+    filepath = pkgConf.filepath(packageConf);
+    dir = (filepath === null ? folderPath : path.dirname(filepath))
+      .replace(process.cwd(), "./")
+      .replace(".//", "./")
+      .replace("./", "");
+    configFile = path.join(folderPath, CONFIG_FILE_NAME);
+
+    if (packageConf.config) {
+      const customConfigFile = path.join(dir, packageConf.config);
+
+      try {
+        packageConf = merge(
+          packageConf,
+          JSON.parse(fs.readFileSync(customConfigFile, "utf8"))
+        );
+        console;
+      } catch (err) {
+        throw Object.assign(new Error(`Invalid custom config file: `), {
+          parent: err
+        });
+      }
+      delete packageConf.config;
+    } else {
+      if (fs.existsSync(configFile)) {
+        packageConf = merge(
+          packageConf,
+          JSON.parse(fs.readFileSync(configFile, "utf8"))
+        );
+      }
+    }
+
+    if (
+      Object.keys(packageConf).length > 0 &&
+      (!ext || dir.includes(folderPath))
+    ) {
+      foundPath = folderPath;
+      break;
+    }
+
+    packageConf = null;
   }
 
-  if (packageConf.config) {
-    try {
-      packageConf = merge(
-        packageConf,
-        JSON.parse(fs.readFileSync(path.join(dir, packageConf.config), "utf8"))
-      );
-      console;
-    } catch (err) {
-      throw Object.assign(new Error("Invalid custom config file"), {
-        parent: err
-      });
-    }
-    delete packageConf.config;
-  } else {
-    if (fs.existsSync(configFile)) {
-      packageConf = merge(
-        packageConf,
-        JSON.parse(fs.readFileSync(configFile, "utf8"))
+  if (ext) {
+    if ((foundPath && !dir.includes(foundPath)) || !packageConf) {
+      console.log(dir, foundPath);
+      throw new Error(
+        `Extension not found: '${ext}' paths searched: ${JSON.stringify(
+          folderPaths
+        )}`
       );
     }
+  } else if (!packageConf) {
+    throw new Error("No config found");
   }
 
   if (packageConf.extends) {
     packageConf.extensions = {};
 
     for (const extension of packageConf.extends) {
-      const extensionPath = path.join("node_modules", extension);
-      packageConf.extensions[extensionPath] = loadConfig(
-        extensionPath,
+      const [extensionPath, extensionConfig] = loadConfig(
+        [
+          path.join(dir, "node_modules", extension),
+          path.join("node_modules", extension)
+        ],
         extension
       );
+      packageConf.extensions[extensionPath] = extensionConfig;
     }
   }
 
-  return processConfig(packageConf);
+  return [dir ? dir : "./", processConfig(packageConf)];
 }
 
 function processConfig(cfg: ProcessingConfig): PackageConfig {
@@ -117,11 +158,12 @@ function processConfig(cfg: ProcessingConfig): PackageConfig {
       cmds[cmd] = [];
 
       if (!Array.isArray(cfg.commands[cmd])) {
-        cmds[cmd].push({ loc: "local", cmd: cfg.commands[cmd] as string });
-      } else {
-        for (const localCmd of cfg.commands[cmd]) {
-          cmds[cmd].push({ loc: "local", cmd: localCmd });
-        }
+        // Have to cast even with the check..
+        cfg.commands[cmd] = [cfg.commands[cmd] as string];
+      }
+
+      for (const localCmd of cfg.commands[cmd]) {
+        cmds[cmd].push({ loc: "local", cmd: localCmd });
       }
     }
   }
@@ -145,9 +187,9 @@ function processConfig(cfg: ProcessingConfig): PackageConfig {
 
             if (files[file]) {
               throw new Error(
-                `Two or more configs are trying to copy the same file: ${file} from source 1: ${
+                `Two or more configs are trying to copy the same file: '${file}' from source 1: '${
                   files[file]
-                } and source 2: ${filePath}`
+                }' and source 2: '${filePath}'`
               );
             }
 

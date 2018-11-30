@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`invalid extension name 1`] = `"Extension not found: 'invalid-extension' paths searched: [\\"node_modules/invalid-extension\\",\\"node_modules/invalid-extension\\"]"`;
