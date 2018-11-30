@@ -4,7 +4,7 @@ import * as merge from "deepmerge";
 
 import * as pkgConf from "pkg-conf";
 
-interface PackageConfig {
+interface ProcessingConfig {
   /**
    * Used to load a custom config file
    */
@@ -14,13 +14,50 @@ interface PackageConfig {
    * Load modules
    */
   extends?: string[];
+
+  /**
+   * Extension configs
+   */
+  extensions?: {
+    [subPkg: string]: PackageConfig;
+  };
+
+  /**
+   * Files to copy to new repo
+   */
+  filesToCopy?: {
+    [destPath: string]: string | false;
+  };
+
+  /**
+   * Commands available to run
+   */
+  commands?: {
+    [cmd: string]: string | string[];
+  };
+}
+
+export interface PackageConfig {
+  /**
+   * Files to copy to new repo
+   */
+  files?: {
+    [destPath: string]: string | false;
+  };
+
+  /**
+   * Commands available to run
+   */
+  cmds?: {
+    [cmd: string]: Array<{ loc: string; cmd: string }>;
+  };
 }
 
 const PACKAGE_CONFIG_KEY = "repo-config";
 const CONFIG_FILE_NAME = "repo.config.json";
 
-export default function loadConfig(folderPath?: string) {
-  let packageConf = pkgConf.sync<PackageConfig>(PACKAGE_CONFIG_KEY, {
+export default function loadConfig(folderPath?: string, ext?: string) {
+  let packageConf = pkgConf.sync<ProcessingConfig>(PACKAGE_CONFIG_KEY, {
     skipOnFalse: true,
     cwd: folderPath
   });
@@ -29,9 +66,7 @@ export default function loadConfig(folderPath?: string) {
   const configFile = path.join(dir, CONFIG_FILE_NAME);
 
   if (folderPath && !dir.includes(folderPath)) {
-    throw new Error(
-      `Module not found: ${folderPath.substr("node_modules/".length)}`
-    );
+    throw new Error(`Module not found: ${ext}`);
   }
 
   if (packageConf.config) {
@@ -57,13 +92,88 @@ export default function loadConfig(folderPath?: string) {
   }
 
   if (packageConf.extends) {
-    packageConf.extends.forEach(pkg => {
-      packageConf = merge(
-        packageConf,
-        loadConfig(path.join("node_modules", pkg))
+    packageConf.extensions = {};
+
+    for (const extension of packageConf.extends) {
+      const extensionPath = path.join("node_modules", extension);
+      packageConf.extensions[extensionPath] = loadConfig(
+        extensionPath,
+        extension
       );
-    });
+    }
   }
 
-  return packageConf;
+  return processConfig(packageConf);
+}
+
+function processConfig(cfg: ProcessingConfig): PackageConfig {
+  const files = cfg.filesToCopy || {};
+  const cmds: {
+    [cmd: string]: Array<{ loc: string; cmd: string }>;
+  } = {};
+
+  if (cfg.commands) {
+    for (const cmd of Object.keys(cfg.commands)) {
+      cmds[cmd] = [];
+
+      if (!Array.isArray(cfg.commands[cmd])) {
+        cmds[cmd].push({ loc: "local", cmd: cfg.commands[cmd] as string });
+      } else {
+        for (const localCmd of cfg.commands[cmd]) {
+          cmds[cmd].push({ loc: "local", cmd: localCmd });
+        }
+      }
+    }
+  }
+
+  if (cfg.extensions) {
+    for (const ext of Object.keys(cfg.extensions)) {
+      // Needed as there is an issue with typescript and dynamic keys with null checks as of 3.2
+      const extensionConfig = cfg.extensions[ext];
+
+      if (extensionConfig.files) {
+        for (const file of Object.keys(extensionConfig.files)) {
+          // Again needed due to dynamic key
+          const fileValue = extensionConfig.files[file];
+
+          if (files[file] === false || fileValue === false) {
+            files[file] = false;
+          } else {
+            const filePath = fileValue.includes("node_modules")
+              ? fileValue
+              : path.join(ext, fileValue);
+
+            if (files[file]) {
+              throw new Error(
+                `Two or more configs are trying to copy the same file: ${file} from source 1: ${
+                  files[file]
+                } and source 2: ${filePath}`
+              );
+            }
+
+            files[file] = filePath;
+          }
+        }
+      }
+
+      if (extensionConfig.cmds) {
+        for (const cmd of Object.keys(extensionConfig.cmds)) {
+          if (!cmds[cmd]) {
+            cmds[cmd] = [];
+          }
+
+          for (const extensionCmd of extensionConfig.cmds[cmd]) {
+            cmds[cmd].push({
+              loc: extensionCmd.loc.includes("node_modules")
+                ? extensionCmd.loc
+                : ext,
+              cmd: extensionCmd.cmd
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return { files, cmds };
 }

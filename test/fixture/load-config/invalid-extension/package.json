@@ -5,6 +5,9 @@
     },
     "filesToCopy": {
       "random-file": "random-file.txt"
-    }
+    },
+    "extends": [
+      "invalid-extension"
+    ]
   }
 }

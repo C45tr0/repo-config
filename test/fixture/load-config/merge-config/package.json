@@ -1,7 +1,10 @@
 {
   "repo-config": {
-    "copy": {
-      "random-file2": ""
+    "commands": {
+      "random-command2": "random-command2"
+    },
+    "filesToCopy": {
+      "random-file2": "random-file2.txt"
     },
     "extends": [
       "test-extend"

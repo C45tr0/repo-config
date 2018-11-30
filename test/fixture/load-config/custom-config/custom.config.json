@@ -1,3 +1,6 @@
 {
-  "copy": { "random-file": "" }
+  "commands": {
+    "random-command": "random-command"
+  },
+  "filesToCopy": { "random-file": "random-file.txt" }
 }
