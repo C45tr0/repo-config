@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`finds config at repo.config.json 1`] = `
+Array [
+  "./",
+  Object {
+    "cmds": Object {
+      "random-command": Array [
+        Object {
+          "cmd": "random-command",
+          "loc": "local",
+        },
+      ],
+    },
+    "files": Object {
+      "random-file": "random-file.txt",
+    },
+  },
+]
+`;
+
+exports[`finds config in package.json 1`] = `
+Array [
+  "./",
+  Object {
+    "cmds": Object {
+      "random-command": Array [
+        Object {
+          "cmd": "random-command",
+          "loc": "local",
+        },
+      ],
+    },
+    "files": Object {
+      "random-file": "random-file.txt",
+    },
+  },
+]
+`;
+
+exports[`finds config in package.json and repo.config.json and merges 1`] = `
+Array [
+  "./",
+  Object {
+    "cmds": Object {
+      "random-command": Array [
+        Object {
+          "cmd": "random-command",
+          "loc": "local",
+        },
+      ],
+      "random-command2": Array [
+        Object {
+          "cmd": "random-command2",
+          "loc": "local",
+        },
+        Object {
+          "cmd": "random-command3",
+          "loc": "node_modules/test-extend",
+        },
+      ],
+      "random-command3": Array [
+        Object {
+          "cmd": "random-command3",
+          "loc": "node_modules/test-extend2",
+        },
+      ],
+    },
+    "files": Object {
+      "random-file": "random-file.txt",
+      "random-file2": "random-file2.txt",
+      "random-file3": "node_modules/test-extend2/random-file3.txt",
+    },
+  },
+]
+`;
+
+exports[`finds custom config from package.json 1`] = `
+Array [
+  "./",
+  Object {
+    "cmds": Object {
+      "random-command": Array [
+        Object {
+          "cmd": "random-command",
+          "loc": "local",
+        },
+      ],
+    },
+    "files": Object {
+      "random-file": "random-file.txt",
+    },
+  },
+]
+`;
+
+exports[`invalid extension name 1`] = `"Extension not found: 'invalid-extension' paths searched: [\\"node_modules/invalid-extension\\",\\"node_modules/invalid-extension\\"]"`;
+
+exports[`recurses extends and merges 1`] = `
+Array [
+  "./",
+  Object {
+    "cmds": Object {
+      "random-command": Array [
+        Object {
+          "cmd": "random-command",
+          "loc": "node_modules/test-extend",
+        },
+      ],
+      "random-command2": Array [
+        Object {
+          "cmd": "random-command2",
+          "loc": "node_modules/test-extend2",
+        },
+      ],
+    },
+    "files": Object {
+      "random-file": "node_modules/test-extend/random-file.txt",
+      "random-file2": "node_modules/test-extend2/random-file2.txt",
+    },
+  },
+]
+`;
+
+exports[`recurses extends and merges with hierarchy node_modules 1`] = `
+Array [
+  "./",
+  Object {
+    "cmds": Object {
+      "random-command": Array [
+        Object {
+          "cmd": "random-command",
+          "loc": "node_modules/test-extend",
+        },
+      ],
+    },
+    "files": Object {
+      "random-file": "node_modules/test-extend/random-file.txt",
+      "random-file2": "node_modules/test-extend/node_modules/test-extend2/random-file2.txt",
+    },
+  },
+]
+`;
