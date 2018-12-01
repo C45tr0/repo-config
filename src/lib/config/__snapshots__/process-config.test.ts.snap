@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`allow config to remove file 1`] = `
+Object {
+  "cmds": Object {},
+  "files": Object {
+    "tsconfig.json": false,
+  },
+}
+`;
+
+exports[`throws error when files conflict 1`] = `"Two or more configs are trying to copy the same file: 'tsconfig.json' from source 1: 'node_modules/extension1/files/tsconfig.json' and source 2: 'node_modules/extension2/files/tsconfig.json'"`;

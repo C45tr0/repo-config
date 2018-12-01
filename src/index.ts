@@ -1,10 +1,10 @@
 import * as minimist from "minimist";
 
-import loadConfig from "./lib/load-config";
+import config from "./lib/config";
 
 const argz = minimist(process.argv.slice(2));
 
-console.log("Loaded Conf: ", loadConfig());
+console.log("Loaded Conf: ", config());
 
 switch (argz._[0]) {
   case "run":

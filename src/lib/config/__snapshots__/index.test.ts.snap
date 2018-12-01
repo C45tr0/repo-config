@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`finds config at repo.config.json 1`] = `
+Object {
+  "cmds": Object {
+    "random-command": Array [
+      Object {
+        "cmd": "random-command",
+        "loc": "local",
+      },
+    ],
+  },
+  "files": Object {
+    "random-file": "random-file.txt",
+  },
+}
+`;
+
+exports[`finds config in package.json 1`] = `
+Object {
+  "cmds": Object {
+    "random-command": Array [
+      Object {
+        "cmd": "random-command",
+        "loc": "local",
+      },
+    ],
+  },
+  "files": Object {
+    "random-file": "random-file.txt",
+  },
+}
+`;
+
+exports[`finds config in package.json and repo.config.json and merges 1`] = `
+Object {
+  "cmds": Object {
+    "random-command": Array [
+      Object {
+        "cmd": "random-command",
+        "loc": "local",
+      },
+    ],
+    "random-command2": Array [
+      Object {
+        "cmd": "random-command2",
+        "loc": "local",
+      },
+      Object {
+        "cmd": "random-command3",
+        "loc": "node_modules/test-extend",
+      },
+    ],
+    "random-command3": Array [
+      Object {
+        "cmd": "random-command3",
+        "loc": "node_modules/test-extend2",
+      },
+    ],
+  },
+  "files": Object {
+    "random-file": "random-file.txt",
+    "random-file2": "random-file2.txt",
+    "random-file3": "node_modules/test-extend2/random-file3.txt",
+  },
+}
+`;
+
+exports[`finds custom config from package.json 1`] = `
+Object {
+  "cmds": Object {
+    "random-command": Array [
+      Object {
+        "cmd": "random-command",
+        "loc": "local",
+      },
+    ],
+  },
+  "files": Object {
+    "random-file": "random-file.txt",
+  },
+}
+`;
+
+exports[`recurses extends and merges 1`] = `
+Object {
+  "cmds": Object {
+    "random-command": Array [
+      Object {
+        "cmd": "random-command",
+        "loc": "node_modules/test-extend",
+      },
+    ],
+    "random-command2": Array [
+      Object {
+        "cmd": "random-command2",
+        "loc": "node_modules/test-extend2",
+      },
+    ],
+  },
+  "files": Object {
+    "random-file": "node_modules/test-extend/random-file.txt",
+    "random-file2": "node_modules/test-extend2/random-file2.txt",
+  },
+}
+`;
+
+exports[`recurses extends and merges with hierarchy node_modules 1`] = `
+Object {
+  "cmds": Object {
+    "random-command": Array [
+      Object {
+        "cmd": "random-command",
+        "loc": "node_modules/test-extend",
+      },
+    ],
+  },
+  "files": Object {
+    "random-file": "node_modules/test-extend/random-file.txt",
+    "random-file2": "node_modules/test-extend/node_modules/test-extend2/random-file2.txt",
+  },
+}
+`;
+
+exports[`throws error when files conflict 1`] = `"Two or more configs are trying to copy the same file: 'random-file' from source 1: 'random-file.txt' and source 2: 'node_modules/test-extend2/random-file.txt'"`;
+
+exports[`throws error when no config found 1`] = `"No config found"`;
+
+exports[`throws error when no extension config found 1`] = `"Extension not found: 'invalid-extension' paths searched: [\\"node_modules/invalid-extension\\",\\"node_modules/invalid-extension\\"]"`;

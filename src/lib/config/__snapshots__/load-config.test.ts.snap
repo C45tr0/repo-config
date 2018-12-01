@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`returns blank dir on top level config load 1`] = `""`;
+
+exports[`returns default data if no config found 1`] = `
+Object {
+  "dir": "",
+  "packageConf": Object {},
+}
+`;
+
+exports[`returns relative path on extenstion config load 1`] = `"node_modules/test-extend"`;
+
+exports[`throws error when custom config can't be found 1`] = `"Custom config file not found at path: custom.config.json"`;
+
+exports[`throws error when custom config can't be loaded 1`] = `"Invalid custom config file: custom.config.json"`;
+
+exports[`throws error when repo.config.json can't be loaded 1`] = `"Invalid config file: repo.config.json"`;
