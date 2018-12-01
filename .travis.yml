@@ -1,7 +1,7 @@
 language: node_js
 os:
   - linux
-  - windows
+  #- windows
 cache: yarn
 node_js:
   - "11"
