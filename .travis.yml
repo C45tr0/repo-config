@@ -1,0 +1,11 @@
+language: node_js
+os:
+  - windows
+  - linux
+cache: yarn
+node_js:
+  - "6"
+  - "8"
+  - "10"
+  - "11"
+after_success: npx codecov
